@@ -4,7 +4,7 @@ import { IUser } from "../user/user.interface";
 import AppError from "../../errors/AppError";
 import generateToken from "../../utils/generateToken";
 import config from "../../config";
-import { SignOptions } from "jsonwebtoken";
+import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
 
 //Register a new user
 const registerUser = async (payload: IUser) => {
@@ -49,13 +49,52 @@ const loginUser = async (payload: { email: string; password: string }) => {
     config.jwt_access_secret as string,
     config.jwt_access_expires as SignOptions["expiresIn"]
   );
+  const refreshToken = generateToken(
+    {
+      userId: user._id.toString(),
+      email: user.email,
+      role: user.role,
+    },
+    config.jwt_refresh_secret as string,
+    config.jwt_refresh_expires as SignOptions["expiresIn"]
+  );
+  return {
+    accessToken,
+    refreshToken,
+  };
+};
+const refreshToken = async (token: string) => {
+  if (!token) {
+    throw new AppError(401, "You are not authorized");
+  }
+
+  const decoded = jwt.verify(
+    token,
+    config.jwt_refresh_secret as string
+  ) as JwtPayload;
+
+  const user = await User.findById(decoded.userId);
+
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+
+  const accessToken = generateToken(
+    {
+      userId: user._id.toString(),
+      email: user.email,
+      role: user.role,
+    },
+    config.jwt_access_secret as string,
+    config.jwt_access_expires as SignOptions["expiresIn"]
+  );
 
   return {
     accessToken,
   };
 };
-
 export const AuthServices = {
   registerUser,
   loginUser,
+  refreshToken,
 };

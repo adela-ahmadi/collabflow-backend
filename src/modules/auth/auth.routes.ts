@@ -17,6 +17,7 @@ router.post(
   validateRequest(loginValidationSchema),
   AuthControllers.loginUser
 );
+router.post("/refresh-token", AuthControllers.refreshToken);
 
 router.get("/", (_req, res) => {
   res.send("Auth route working");
