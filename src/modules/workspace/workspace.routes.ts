@@ -5,7 +5,10 @@ import validateRequest from "../../middlewares/validateRequest";
 
 import { WorkspaceControllers } from "./workspace.controller";
 
-import { createWorkspaceValidationSchema } from "./workspace.validation";
+import {
+  createWorkspaceValidationSchema,
+  inviteMemberValidationSchema,
+} from "./workspace.validation";
 
 const router = Router();
 
@@ -24,6 +27,16 @@ router.get(
   auth("USER", "ADMIN"),
 
   WorkspaceControllers.getMyWorkspaces
+);
+
+router.patch(
+  "/:workspaceId/invite",
+
+  auth("USER", "ADMIN"),
+
+  validateRequest(inviteMemberValidationSchema),
+
+  WorkspaceControllers.inviteMember
 );
 
 export default router;

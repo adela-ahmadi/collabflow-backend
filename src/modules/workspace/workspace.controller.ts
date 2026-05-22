@@ -24,7 +24,25 @@ const getMyWorkspaces = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
+const inviteMember = asyncHandler(async (req: Request, res: Response) => {
+  const result = await WorkspaceServices.inviteMember(
+    req.params.workspaceId as string,
+
+    req.body,
+
+    req.user.userId
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Member invited successfully",
+
+    data: result,
+  });
+});
+
 export const WorkspaceControllers = {
   createWorkspace,
   getMyWorkspaces,
+  inviteMember,
 };

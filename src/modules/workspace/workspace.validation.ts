@@ -7,3 +7,8 @@ export const createWorkspaceValidationSchema = z.object({
     description: z.string().optional(),
   }),
 });
+export const inviteMemberValidationSchema = z.object({
+  body: z.object({
+    email: z.email(),
+  }),
+});

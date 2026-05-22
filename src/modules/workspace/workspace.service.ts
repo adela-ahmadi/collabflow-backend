@@ -1,6 +1,7 @@
 import { JwtPayload } from "jsonwebtoken";
-
 import Workspace from "./workspace.model";
+import AppError from "../../errors/AppError";
+import User from "../user/user.model";
 
 const createWorkspace = async (
   payload: {
@@ -32,7 +33,50 @@ const getMyWorkspaces = async (userId: string) => {
   return workspaces;
 };
 
+const inviteMember = async (
+  workspaceId: string,
+
+  payload: {
+    email: string;
+  },
+
+  userId: string
+) => {
+  const workspace = await Workspace.findById(workspaceId);
+
+  if (!workspace) {
+    throw new AppError(404, "Workspace not found");
+  }
+
+  if (workspace.owner.toString() !== userId) {
+    throw new AppError(403, "Only workspace owner can invite members");
+  }
+
+  const user = await User.findOne({
+    email: payload.email,
+  });
+
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+
+  const alreadyMember = workspace.members.some(
+    (member) => member.toString() === user._id.toString()
+  );
+
+  if (alreadyMember) {
+    throw new AppError(400, "User is already a member");
+  }
+
+  workspace.members.push(user._id);
+
+  await workspace.save();
+
+  return workspace;
+};
+
 export const WorkspaceServices = {
   createWorkspace,
   getMyWorkspaces,
+  inviteMember,
 };
