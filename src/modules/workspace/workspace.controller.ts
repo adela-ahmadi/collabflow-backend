@@ -14,6 +14,17 @@ const createWorkspace = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
+const getMyWorkspaces = asyncHandler(async (req: Request, res: Response) => {
+  const result = await WorkspaceServices.getMyWorkspaces(req.user.userId);
+
+  res.status(200).json({
+    success: true,
+    message: "Workspaces retrieved successfully",
+    data: result,
+  });
+});
+
 export const WorkspaceControllers = {
   createWorkspace,
+  getMyWorkspaces,
 };

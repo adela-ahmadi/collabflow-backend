@@ -20,6 +20,19 @@ const createWorkspace = async (
   return workspace;
 };
 
+const getMyWorkspaces = async (userId: string) => {
+  const workspaces = await Workspace.find({
+    members: userId,
+  })
+    .populate("owner", "name email")
+    .sort({
+      createdAt: -1,
+    });
+
+  return workspaces;
+};
+
 export const WorkspaceServices = {
   createWorkspace,
+  getMyWorkspaces,
 };

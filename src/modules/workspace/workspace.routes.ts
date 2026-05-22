@@ -18,4 +18,12 @@ router.post(
   WorkspaceControllers.createWorkspace
 );
 
+router.get(
+  "/my-workspaces",
+
+  auth("USER", "ADMIN"),
+
+  WorkspaceControllers.getMyWorkspaces
+);
+
 export default router;
