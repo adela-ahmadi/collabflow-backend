@@ -25,7 +25,20 @@ const createTask = async (
 
   return task;
 };
+const getWorkspaceTasks = async (workspaceId: string) => {
+  const tasks = await Task.find({
+    workspace: workspaceId,
+  })
+    .populate("assignedTo", "name email")
+    .populate("createdBy", "name email")
+    .sort({
+      createdAt: -1,
+    });
+
+  return tasks;
+};
 
 export const TaskServices = {
   createTask,
+  getWorkspaceTasks,
 };

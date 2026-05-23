@@ -18,7 +18,19 @@ const createTask = asyncHandler(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getWorkspaceTasks = asyncHandler(async (req: Request, res: Response) => {
+  const result = await TaskServices.getWorkspaceTasks(
+    req.params.workspaceId as string
+  );
 
+  res.status(200).json({
+    success: true,
+    message: "Tasks retrieved successfully",
+
+    data: result,
+  });
+});
 export const TaskControllers = {
   createTask,
+  getWorkspaceTasks,
 };

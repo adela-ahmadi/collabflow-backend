@@ -19,5 +19,12 @@ router.post(
 
   TaskControllers.createTask
 );
+router.get(
+  "/workspace/:workspaceId",
+
+  auth("USER", "ADMIN"),
+
+  TaskControllers.getWorkspaceTasks
+);
 
 export default router;
