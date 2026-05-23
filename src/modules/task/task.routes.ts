@@ -6,7 +6,10 @@ import validateRequest from "../../middlewares/validateRequest";
 
 import { TaskControllers } from "./task.controller";
 
-import { createTaskValidationSchema } from "./task.validation";
+import {
+  createTaskValidationSchema,
+  updateTaskStatusValidationSchema,
+} from "./task.validation";
 
 const router = Router();
 
@@ -25,6 +28,16 @@ router.get(
   auth("USER", "ADMIN"),
 
   TaskControllers.getWorkspaceTasks
+);
+
+router.patch(
+  "/:taskId/status",
+
+  auth("USER", "ADMIN"),
+
+  validateRequest(updateTaskStatusValidationSchema),
+
+  TaskControllers.updateTaskStatus
 );
 
 export default router;

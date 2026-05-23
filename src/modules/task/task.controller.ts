@@ -30,7 +30,23 @@ const getWorkspaceTasks = asyncHandler(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
+const updateTaskStatus = asyncHandler(async (req: Request, res: Response) => {
+  const result = await TaskServices.updateTaskStatus(
+    req.params.taskId as string,
+
+    req.body.status
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Task status updated successfully",
+
+    data: result,
+  });
+});
 export const TaskControllers = {
   createTask,
   getWorkspaceTasks,
+  updateTaskStatus,
 };

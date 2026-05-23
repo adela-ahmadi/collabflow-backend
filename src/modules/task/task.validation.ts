@@ -15,3 +15,8 @@ export const createTaskValidationSchema = z.object({
     dueDate: z.string().optional(),
   }),
 });
+export const updateTaskStatusValidationSchema = z.object({
+  body: z.object({
+    status: z.enum(["TODO", "IN_PROGRESS", "DONE"]),
+  }),
+});

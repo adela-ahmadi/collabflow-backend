@@ -1,6 +1,7 @@
 import { JwtPayload } from "jsonwebtoken";
 
 import Task from "./task.model";
+import AppError from "../../errors/AppError";
 
 const createTask = async (
   payload: any,
@@ -38,7 +39,26 @@ const getWorkspaceTasks = async (workspaceId: string) => {
   return tasks;
 };
 
+const updateTaskStatus = async (
+  taskId: string,
+
+  status: string
+) => {
+  const task = await Task.findById(taskId);
+
+  if (!task) {
+    throw new AppError(404, "Task not found");
+  }
+
+  task.status = status as "TODO" | "IN_PROGRESS" | "DONE";
+
+  await task.save();
+
+  return task;
+};
+
 export const TaskServices = {
   createTask,
   getWorkspaceTasks,
+  updateTaskStatus,
 };
