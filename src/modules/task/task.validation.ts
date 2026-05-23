@@ -20,3 +20,9 @@ export const updateTaskStatusValidationSchema = z.object({
     status: z.enum(["TODO", "IN_PROGRESS", "DONE"]),
   }),
 });
+
+export const assignTaskValidationSchema = z.object({
+  body: z.object({
+    assignedTo: z.string(),
+  }),
+});

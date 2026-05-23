@@ -9,6 +9,7 @@ import { TaskControllers } from "./task.controller";
 import {
   createTaskValidationSchema,
   updateTaskStatusValidationSchema,
+  assignTaskValidationSchema,
 } from "./task.validation";
 
 const router = Router();
@@ -38,6 +39,16 @@ router.patch(
   validateRequest(updateTaskStatusValidationSchema),
 
   TaskControllers.updateTaskStatus
+);
+
+router.patch(
+  "/:taskId/assign",
+
+  auth("USER", "ADMIN"),
+
+  validateRequest(assignTaskValidationSchema),
+
+  TaskControllers.assignTask
 );
 
 export default router;

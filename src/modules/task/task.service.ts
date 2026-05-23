@@ -2,6 +2,7 @@ import { JwtPayload } from "jsonwebtoken";
 
 import Task from "./task.model";
 import AppError from "../../errors/AppError";
+import Workspace from "../workspace/workspace.model";
 
 const createTask = async (
   payload: any,
@@ -57,8 +58,41 @@ const updateTaskStatus = async (
   return task;
 };
 
+const assignTask = async (
+  taskId: string,
+
+  assignedTo: string
+) => {
+  const task = await Task.findById(taskId);
+
+  if (!task) {
+    throw new AppError(404, "Task not found");
+  }
+
+  const workspace = await Workspace.findById(task.workspace);
+
+  if (!workspace) {
+    throw new AppError(404, "Workspace not found");
+  }
+
+  const isMember = workspace.members.some(
+    (member) => member.toString() === assignedTo
+  );
+
+  if (!isMember) {
+    throw new AppError(400, "User is not a workspace member");
+  }
+
+  task.assignedTo = assignedTo as any;
+
+  await task.save();
+
+  return task;
+};
+
 export const TaskServices = {
   createTask,
   getWorkspaceTasks,
   updateTaskStatus,
+  assignTask,
 };

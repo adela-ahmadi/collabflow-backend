@@ -45,8 +45,25 @@ const updateTaskStatus = asyncHandler(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
+const assignTask = asyncHandler(async (req: Request, res: Response) => {
+  const result = await TaskServices.assignTask(
+    req.params.taskId as string,
+
+    req.body.assignedTo
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Task assigned successfully",
+
+    data: result,
+  });
+});
+
 export const TaskControllers = {
   createTask,
   getWorkspaceTasks,
   updateTaskStatus,
+  assignTask,
 };
