@@ -8,6 +8,7 @@ import { WorkspaceControllers } from "./workspace.controller";
 import {
   createWorkspaceValidationSchema,
   inviteMemberValidationSchema,
+  promoteMemberValidationSchema,
 } from "./workspace.validation";
 
 const router = Router();
@@ -37,6 +38,16 @@ router.patch(
   validateRequest(inviteMemberValidationSchema),
 
   WorkspaceControllers.inviteMember
+);
+
+router.patch(
+  "/:workspaceId/promote",
+
+  auth("USER", "ADMIN"),
+
+  validateRequest(promoteMemberValidationSchema),
+
+  WorkspaceControllers.promoteMemberToAdmin
 );
 
 export default router;

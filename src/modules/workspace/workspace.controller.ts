@@ -41,8 +41,28 @@ const inviteMember = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
+const promoteMemberToAdmin = asyncHandler(
+  async (req: Request, res: Response) => {
+    const result = await WorkspaceServices.promoteMemberToAdmin(
+      req.params.workspaceId as string,
+
+      req.body.userId,
+
+      req.user.userId
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Member promoted to admin successfully",
+
+      data: result,
+    });
+  }
+);
+
 export const WorkspaceControllers = {
   createWorkspace,
   getMyWorkspaces,
   inviteMember,
+  promoteMemberToAdmin,
 };

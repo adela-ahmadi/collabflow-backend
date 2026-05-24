@@ -84,8 +84,41 @@ const inviteMember = async (
   return workspace;
 };
 
+const promoteMemberToAdmin = async (
+  workspaceId: string,
+
+  userId: string,
+
+  currentUserId: string
+) => {
+  const workspace = await Workspace.findById(workspaceId);
+
+  if (!workspace) {
+    throw new AppError(404, "Workspace not found");
+  }
+
+  if (workspace.owner.toString() !== currentUserId) {
+    throw new AppError(403, "Only owner can promote members");
+  }
+
+  const member = workspace.members.find(
+    (member) => member.user.toString() === userId
+  );
+
+  if (!member) {
+    throw new AppError(404, "Member not found");
+  }
+
+  member.role = "ADMIN";
+
+  await workspace.save();
+
+  return workspace;
+};
+
 export const WorkspaceServices = {
   createWorkspace,
   getMyWorkspaces,
   inviteMember,
+  promoteMemberToAdmin,
 };

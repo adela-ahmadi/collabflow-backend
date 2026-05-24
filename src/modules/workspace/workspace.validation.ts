@@ -12,3 +12,9 @@ export const inviteMemberValidationSchema = z.object({
     email: z.email(),
   }),
 });
+
+export const promoteMemberValidationSchema = z.object({
+  body: z.object({
+    userId: z.string(),
+  }),
+});
