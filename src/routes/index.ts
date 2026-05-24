@@ -3,6 +3,7 @@ import authRoutes from "../modules/auth/auth.routes";
 import userRoutes from "../modules/user/user.routes";
 import workspaceRoutes from "../modules/workspace/workspace.routes";
 import taskRoutes from "../modules/task/task.routes";
+import commentRoutes from "../modules/comment/comment.routes";
 
 const router = Router();
 
@@ -22,6 +23,10 @@ const moduleRoutes = [
   {
     path: "/tasks",
     route: taskRoutes,
+  },
+  {
+    path: "/comments",
+    route: commentRoutes,
   },
 ];
 
