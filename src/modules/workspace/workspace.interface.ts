@@ -1,5 +1,13 @@
 import { Types } from "mongoose";
 
+export type WorkspaceRole = "OWNER" | "ADMIN" | "MEMBER";
+
+export interface IWorkspaceMember {
+  user: Types.ObjectId;
+
+  role: WorkspaceRole;
+}
+
 export interface IWorkspace {
   name: string;
 
@@ -7,5 +15,5 @@ export interface IWorkspace {
 
   owner: Types.ObjectId;
 
-  members: Types.ObjectId[];
+  members: IWorkspaceMember[];
 }

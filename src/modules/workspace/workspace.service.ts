@@ -15,7 +15,13 @@ const createWorkspace = async (
 
     owner: user.userId,
 
-    members: [user.userId],
+    members: [
+      {
+        user: user.userId,
+
+        role: "OWNER",
+      },
+    ],
   });
 
   return workspace;
@@ -23,7 +29,7 @@ const createWorkspace = async (
 
 const getMyWorkspaces = async (userId: string) => {
   const workspaces = await Workspace.find({
-    members: userId,
+    members: { $elemMatch: { user: userId } },
   })
     .populate("owner", "name email")
     .sort({
@@ -61,14 +67,17 @@ const inviteMember = async (
   }
 
   const alreadyMember = workspace.members.some(
-    (member) => member.toString() === user._id.toString()
+    (member) => member.user.toString() === user._id.toString()
   );
 
   if (alreadyMember) {
     throw new AppError(400, "User is already a member");
   }
 
-  workspace.members.push(user._id);
+  workspace.members.push({
+    user: user._id,
+    role: "MEMBER",
+  });
 
   await workspace.save();
 

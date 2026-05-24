@@ -76,7 +76,7 @@ const assignTask = async (
   }
 
   const isMember = workspace.members.some(
-    (member) => member.toString() === assignedTo
+    (member) => member.user.toString() === assignedTo
   );
 
   if (!isMember) {
