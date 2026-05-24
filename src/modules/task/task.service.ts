@@ -90,9 +90,104 @@ const assignTask = async (
   return task;
 };
 
+const getWorkspaceMemberRole = (
+  workspace: any,
+
+  userId: string
+) => {
+  const member = workspace.members.find(
+    (member: any) => member.user.toString() === userId
+  );
+
+  return member?.role;
+};
+
+const updateTask = async (
+  taskId: string,
+
+  payload: any,
+
+  currentUserId: string
+) => {
+  const task = await Task.findById(taskId);
+
+  if (!task) {
+    throw new AppError(404, "Task not found");
+  }
+
+  const workspace = await Workspace.findById(task.workspace);
+
+  if (!workspace) {
+    throw new AppError(404, "Workspace not found");
+  }
+
+  const role = getWorkspaceMemberRole(
+    workspace,
+
+    currentUserId
+  );
+
+  const isCreator = task.createdBy.toString() === currentUserId;
+
+  const canEdit = isCreator || role === "ADMIN" || role === "OWNER";
+
+  if (!canEdit) {
+    throw new AppError(403, "You are not allowed to edit this task");
+  }
+
+  const updatedTask = await Task.findByIdAndUpdate(
+    taskId,
+
+    payload,
+
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  return updatedTask;
+};
+
+const deleteTask = async (
+  taskId: string,
+
+  currentUserId: string
+) => {
+  const task = await Task.findById(taskId);
+
+  if (!task) {
+    throw new AppError(404, "Task not found");
+  }
+
+  const workspace = await Workspace.findById(task.workspace);
+
+  if (!workspace) {
+    throw new AppError(404, "Workspace not found");
+  }
+
+  const role = getWorkspaceMemberRole(
+    workspace,
+
+    currentUserId
+  );
+
+  const canDelete = role === "ADMIN" || role === "OWNER";
+
+  if (!canDelete) {
+    throw new AppError(403, "You are not allowed to delete this task");
+  }
+
+  await Task.findByIdAndDelete(taskId);
+
+  return null;
+};
+
 export const TaskServices = {
   createTask,
   getWorkspaceTasks,
   updateTaskStatus,
   assignTask,
+  updateTask,
+  deleteTask,
 };

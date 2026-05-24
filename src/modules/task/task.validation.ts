@@ -26,3 +26,15 @@ export const assignTaskValidationSchema = z.object({
     assignedTo: z.string(),
   }),
 });
+
+export const updateTaskValidationSchema = z.object({
+  body: z.object({
+    title: z.string().optional(),
+
+    description: z.string().optional(),
+
+    priority: z.enum(["LOW", "MEDIUM", "HIGH"]).optional(),
+
+    dueDate: z.string().optional(),
+  }),
+});

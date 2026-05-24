@@ -61,9 +61,40 @@ const assignTask = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
+const updateTask = asyncHandler(async (req: Request, res: Response) => {
+  const result = await TaskServices.updateTask(
+    req.params.taskId as string,
+
+    req.body,
+
+    req.user.userId
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Task updated successfully",
+
+    data: result,
+  });
+});
+
+const deleteTask = asyncHandler(async (req: Request, res: Response) => {
+  await TaskServices.deleteTask(
+    req.params.taskId as string,
+
+    req.user.userId
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Task deleted successfully",
+  });
+});
 export const TaskControllers = {
   createTask,
   getWorkspaceTasks,
   updateTaskStatus,
   assignTask,
+  updateTask,
+  deleteTask,
 };
