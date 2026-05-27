@@ -5,6 +5,7 @@ import workspaceRoutes from "../modules/workspace/workspace.routes";
 import taskRoutes from "../modules/task/task.routes";
 import commentRoutes from "../modules/comment/comment.routes";
 import activityRoutes from "../modules/activity/activity.routes";
+import notificationRoutes from "../modules/notification/notification.routes";
 
 const router = Router();
 
@@ -32,6 +33,10 @@ const moduleRoutes = [
   {
     path: "/activities",
     route: activityRoutes,
+  },
+  {
+    path: "/notifications",
+    route: notificationRoutes,
   },
 ];
 

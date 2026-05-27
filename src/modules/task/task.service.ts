@@ -4,6 +4,7 @@ import Task from "./task.model";
 import AppError from "../../errors/AppError";
 import Workspace from "../workspace/workspace.model";
 import { ActivityServices } from "../activity/activity.service";
+import { NotificationServices } from "../notification/notification.service";
 
 const createTask = async (
   payload: any,
@@ -103,6 +104,14 @@ const assignTask = async (
   }
 
   task.assignedTo = assignedTo as any;
+
+  await NotificationServices.createNotification(
+    "You have been assigned a task",
+
+    assignedTo,
+
+    task._id.toString()
+  );
 
   await task.save();
 
