@@ -3,6 +3,7 @@ import { JwtPayload } from "jsonwebtoken";
 import Task from "./task.model";
 import AppError from "../../errors/AppError";
 import Workspace from "../workspace/workspace.model";
+import { ActivityServices } from "../activity/activity.service";
 
 const createTask = async (
   payload: any,
@@ -24,7 +25,15 @@ const createTask = async (
 
     createdBy: user.userId,
   });
+  await ActivityServices.createActivityLog(
+    "created a task",
 
+    user.userId,
+
+    payload.workspaceId,
+
+    task._id.toString()
+  );
   return task;
 };
 const getWorkspaceTasks = async (workspaceId: string) => {
@@ -54,6 +63,16 @@ const updateTaskStatus = async (
   task.status = status as "TODO" | "IN_PROGRESS" | "DONE";
 
   await task.save();
+
+  await ActivityServices.createActivityLog(
+    `changed task status to ${status}`,
+
+    task.createdBy.toString(),
+
+    task.workspace.toString(),
+
+    task._id.toString()
+  );
 
   return task;
 };
