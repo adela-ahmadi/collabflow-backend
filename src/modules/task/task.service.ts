@@ -5,6 +5,7 @@ import AppError from "../../errors/AppError";
 import Workspace from "../workspace/workspace.model";
 import { ActivityServices } from "../activity/activity.service";
 import { NotificationServices } from "../notification/notification.service";
+import QueryBuilder from "../../builder/QueryBuilder";
 
 const createTask = async (
   payload: any,
@@ -42,50 +43,22 @@ const getWorkspaceTasks = async (
   workspaceId: string,
   query: Record<string, any>
 ) => {
-  const filter: Record<string, any> = {
-    workspace: workspaceId,
-  };
-
-  if (query.status) {
-    filter.status = query.status;
-  }
-
-  if (query.priority) {
-    filter.priority = query.priority;
-  }
-
-  if (query.search) {
-    filter.title = {
-      $regex: query.search,
-      $options: "i",
-    };
-  }
-
-  const page = Number(query.page) || 1;
-  const limit = Number(query.limit) || 10;
-
-  const skip = (page - 1) * limit;
-
-  const tasks = await Task.find(filter)
-    .populate("assignedTo", "name email")
-    .populate("createdBy", "name email")
-    .sort({
-      createdAt: -1,
+  const taskQuery = new QueryBuilder(
+    Task.find({
+      workspace: workspaceId,
     })
-    .skip(skip)
-    .limit(limit);
+      .populate("assignedTo", "name email")
+      .populate("createdBy", "name email"),
+    query
+  )
+    .search(["title"])
+    .filter()
+    .sort()
+    .paginate();
 
-  const total = await Task.countDocuments(filter);
+  const tasks = await taskQuery.modelQuery;
 
-  return {
-    meta: {
-      page,
-      limit,
-      total,
-      totalPages: Math.ceil(total / limit),
-    },
-    data: tasks,
-  };
+  return tasks;
 };
 
 const updateTaskStatus = async (
