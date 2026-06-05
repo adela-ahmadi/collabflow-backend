@@ -20,7 +20,8 @@ const createTask = asyncHandler(async (req: Request, res: Response) => {
 });
 const getWorkspaceTasks = asyncHandler(async (req: Request, res: Response) => {
   const result = await TaskServices.getWorkspaceTasks(
-    req.params.workspaceId as string
+    req.params.workspaceId as string,
+    req.query
   );
 
   res.status(200).json({

@@ -37,17 +37,55 @@ const createTask = async (
   );
   return task;
 };
-const getWorkspaceTasks = async (workspaceId: string) => {
-  const tasks = await Task.find({
+
+const getWorkspaceTasks = async (
+  workspaceId: string,
+  query: Record<string, any>
+) => {
+  const filter: Record<string, any> = {
     workspace: workspaceId,
-  })
+  };
+
+  if (query.status) {
+    filter.status = query.status;
+  }
+
+  if (query.priority) {
+    filter.priority = query.priority;
+  }
+
+  if (query.search) {
+    filter.title = {
+      $regex: query.search,
+      $options: "i",
+    };
+  }
+
+  const page = Number(query.page) || 1;
+  const limit = Number(query.limit) || 10;
+
+  const skip = (page - 1) * limit;
+
+  const tasks = await Task.find(filter)
     .populate("assignedTo", "name email")
     .populate("createdBy", "name email")
     .sort({
       createdAt: -1,
-    });
+    })
+    .skip(skip)
+    .limit(limit);
 
-  return tasks;
+  const total = await Task.countDocuments(filter);
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+    },
+    data: tasks,
+  };
 };
 
 const updateTaskStatus = async (
