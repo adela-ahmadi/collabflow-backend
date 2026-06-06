@@ -13,6 +13,35 @@ import {
 
 const router = Router();
 
+/**
+ * @swagger
+ * /workspaces/create:
+ *   post:
+ *     summary: Create a workspace
+ *     tags:
+ *       - Workspaces
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: CollabFlow Team
+ *               description:
+ *                 type: string
+ *                 example: Main collaboration workspace
+ *     responses:
+ *       201:
+ *         description: Workspace created successfully
+ */
+
 router.post(
   "/create",
   auth("USER", "ADMIN"),
