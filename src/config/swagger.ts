@@ -60,6 +60,79 @@ const options = {
             },
           },
         },
+        Task: {
+          type: "object",
+
+          required: ["title", "workspace"],
+
+          properties: {
+            title: {
+              type: "string",
+              example: "Build authentication UI",
+            },
+
+            description: {
+              type: "string",
+              example: "Create login and register pages",
+            },
+
+            workspace: {
+              type: "string",
+              example: "665c123456789abcdef12345",
+            },
+
+            assignedTo: {
+              type: "string",
+              example: "665c123456789abcdef12346",
+            },
+
+            status: {
+              type: "string",
+              enum: ["TODO", "IN_PROGRESS", "DONE"],
+              example: "TODO",
+            },
+
+            priority: {
+              type: "string",
+              enum: ["LOW", "MEDIUM", "HIGH"],
+              example: "HIGH",
+            },
+          },
+        },
+        TaskResponse: {
+          type: "object",
+
+          properties: {
+            success: {
+              type: "boolean",
+              example: true,
+            },
+
+            message: {
+              type: "string",
+              example: "Task created successfully",
+            },
+
+            data: {
+              $ref: "#/components/schemas/Task",
+            },
+          },
+        },
+        ErrorResponse: {
+          type: "object",
+
+          properties: {
+            success: {
+              type: "boolean",
+              example: false,
+            },
+
+            message: {
+              type: "string",
+              example: "Validation failed",
+            },
+          },
+        },
       },
     },
 
