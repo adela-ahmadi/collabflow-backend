@@ -26,6 +26,41 @@ const options = {
           bearerFormat: "JWT",
         },
       },
+      schemas: {
+        Workspace: {
+          type: "object",
+          required: ["name"],
+          properties: {
+            name: {
+              type: "string",
+              example: "CollabFlow Team",
+            },
+
+            description: {
+              type: "string",
+              example: "Main collaboration workspace",
+            },
+          },
+        },
+        WorkspaceResponse: {
+          type: "object",
+          properties: {
+            success: {
+              type: "boolean",
+              example: true,
+            },
+
+            message: {
+              type: "string",
+              example: "Workspace created successfully",
+            },
+
+            data: {
+              $ref: "#/components/schemas/Workspace",
+            },
+          },
+        },
+      },
     },
 
     security: [

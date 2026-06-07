@@ -12,7 +12,6 @@ import {
 } from "./workspace.validation";
 
 const router = Router();
-
 /**
  * @swagger
  * /workspaces/create:
@@ -27,21 +26,15 @@ const router = Router();
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - name
- *             properties:
- *               name:
- *                 type: string
- *                 example: CollabFlow Team
- *               description:
- *                 type: string
- *                 example: Main collaboration workspace
+ *             $ref: '#/components/schemas/Workspace'
  *     responses:
  *       201:
  *         description: Workspace created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/WorkspaceResponse'
  */
-
 router.post(
   "/create",
   auth("USER", "ADMIN"),
