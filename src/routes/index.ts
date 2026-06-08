@@ -6,6 +6,7 @@ import taskRoutes from "../modules/task/task.routes";
 import commentRoutes from "../modules/comment/comment.routes";
 import activityRoutes from "../modules/activity/activity.routes";
 import notificationRoutes from "../modules/notification/notification.routes";
+import dashboardRoutes from "../modules/dashboard/dashboard.routes";
 
 const router = Router();
 
@@ -37,6 +38,10 @@ const moduleRoutes = [
   {
     path: "/notifications",
     route: notificationRoutes,
+  },
+  {
+    path: "/dashboard",
+    route: dashboardRoutes,
   },
 ];
 
