@@ -11,5 +11,10 @@ router.get(
   auth("USER", "ADMIN"),
   DashboardControllers.getDashboardStats
 );
+router.get(
+  "/task-status-stats",
+  auth("USER", "ADMIN"),
+  DashboardControllers.getTaskStatusStats
+);
 
 export default router;

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Task from "../task/task.model";
 import Workspace from "../workspace/workspace.model";
 
@@ -37,7 +38,27 @@ const getDashboardStats = async (userId: string) => {
     totalWorkspaces,
   };
 };
+const getTaskStatusStats = async (userId: string) => {
+  const stats = await Task.aggregate([
+    {
+      $match: {
+        createdBy: new mongoose.Types.ObjectId(userId),
+      },
+    },
+    {
+      $group: {
+        _id: "$status",
+        count: {
+          $sum: 1,
+        },
+      },
+    },
+  ]);
+
+  return stats;
+};
 
 export const DashboardServices = {
   getDashboardStats,
+  getTaskStatusStats,
 };
