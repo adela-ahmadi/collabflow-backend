@@ -94,8 +94,24 @@ const getRecentActivities = async (userId: string) => {
   return activities;
 };
 
+const getWorkspaceActivities = async (workspaceId: string) => {
+  const activities = await Activity.find({
+    workspace: workspaceId,
+  })
+    .populate("user", "name email")
+    .populate("task", "title")
+    .populate("workspace", "name")
+    .sort({
+      createdAt: -1,
+    })
+    .limit(20);
+
+  return activities;
+};
+
 export const DashboardServices = {
   getDashboardStats,
   getTaskStatusStats,
   getRecentActivities,
+  getWorkspaceActivities,
 };

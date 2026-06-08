@@ -23,4 +23,10 @@ router.get(
   DashboardControllers.getRecentActivities
 );
 
+router.get(
+  "/workspace-activities/:workspaceId",
+  auth("USER", "ADMIN"),
+  DashboardControllers.getWorkspaceActivities
+);
+
 export default router;

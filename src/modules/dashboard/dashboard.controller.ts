@@ -43,8 +43,23 @@ const getRecentActivities = asyncHandler(
   }
 );
 
+const getWorkspaceActivities = asyncHandler(
+  async (req: Request, res: Response) => {
+    const result = await DashboardServices.getWorkspaceActivities(
+      req.params.workspaceId as string
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Workspace activities retrieved successfully",
+      data: result,
+    });
+  }
+);
+
 export const DashboardControllers = {
   getDashboardStats,
   getTaskStatusStats,
   getRecentActivities,
+  getWorkspaceActivities,
 };
