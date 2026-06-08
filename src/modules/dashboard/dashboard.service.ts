@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Task from "../task/task.model";
 import Workspace from "../workspace/workspace.model";
+import Activity from "../activity/activity.model";
 
 const getDashboardStats = async (userId: string) => {
   const totalTasks = await Task.countDocuments({
@@ -78,8 +79,23 @@ const getTaskStatusStats = async (userId: string) => {
 
   return result;
 };
+const getRecentActivities = async (userId: string) => {
+  const activities = await Activity.find({
+    user: userId,
+  })
+    .populate("user", "name email")
+    .populate("task", "title")
+    .populate("workspace", "name")
+    .sort({
+      createdAt: -1,
+    })
+    .limit(10);
+
+  return activities;
+};
 
 export const DashboardServices = {
   getDashboardStats,
   getTaskStatusStats,
+  getRecentActivities,
 };

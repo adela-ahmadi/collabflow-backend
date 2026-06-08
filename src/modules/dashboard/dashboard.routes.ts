@@ -17,4 +17,10 @@ router.get(
   DashboardControllers.getTaskStatusStats
 );
 
+router.get(
+  "/recent-activities",
+  auth("USER", "ADMIN"),
+  DashboardControllers.getRecentActivities
+);
+
 export default router;
