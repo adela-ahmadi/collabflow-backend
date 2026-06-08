@@ -56,9 +56,14 @@ const getWorkspaceTasks = async (
     .sort()
     .paginate();
 
+  const meta = await taskQuery.countTotal();
+
   const tasks = await taskQuery.modelQuery;
 
-  return tasks;
+  return {
+    meta,
+    result: tasks,
+  };
 };
 
 const updateTaskStatus = async (
