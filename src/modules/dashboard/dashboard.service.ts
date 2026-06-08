@@ -38,6 +38,7 @@ const getDashboardStats = async (userId: string) => {
     totalWorkspaces,
   };
 };
+
 const getTaskStatusStats = async (userId: string) => {
   const stats = await Task.aggregate([
     {
@@ -55,7 +56,27 @@ const getTaskStatusStats = async (userId: string) => {
     },
   ]);
 
-  return stats;
+  const result = {
+    todo: 0,
+    inProgress: 0,
+    done: 0,
+  };
+
+  stats.forEach((item) => {
+    if (item._id === "TODO") {
+      result.todo = item.count;
+    }
+
+    if (item._id === "IN_PROGRESS") {
+      result.inProgress = item.count;
+    }
+
+    if (item._id === "DONE") {
+      result.done = item.count;
+    }
+  });
+
+  return result;
 };
 
 export const DashboardServices = {
