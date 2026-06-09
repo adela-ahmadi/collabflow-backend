@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Task from "../task/task.model";
 import Workspace from "../workspace/workspace.model";
 import Activity from "../activity/activity.model";
+import AppError from "../../errors/AppError";
 
 const getDashboardStats = async (userId: string) => {
   const totalTasks = await Task.countDocuments({
@@ -94,7 +95,20 @@ const getRecentActivities = async (userId: string) => {
   return activities;
 };
 
-const getWorkspaceActivities = async (workspaceId: string) => {
+const getWorkspaceActivities = async (workspaceId: string, userId: string) => {
+  const workspace = await Workspace.findOne({
+    _id: workspaceId,
+    members: {
+      $elemMatch: {
+        user: userId,
+      },
+    },
+  });
+
+  if (!workspace) {
+    throw new AppError(403, "Access denied to this workspace");
+  }
+
   const activities = await Activity.find({
     workspace: workspaceId,
   })

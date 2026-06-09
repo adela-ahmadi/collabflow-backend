@@ -45,8 +45,11 @@ const getRecentActivities = asyncHandler(
 
 const getWorkspaceActivities = asyncHandler(
   async (req: Request, res: Response) => {
+    const user = req.user as JwtPayload;
+
     const result = await DashboardServices.getWorkspaceActivities(
-      req.params.workspaceId as string
+      req.params.workspaceId as string,
+      user.userId
     );
 
     res.status(200).json({
