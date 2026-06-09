@@ -123,9 +123,32 @@ const getWorkspaceActivities = async (workspaceId: string, userId: string) => {
   return activities;
 };
 
+const getCompletionRate = async (userId: string) => {
+  const totalTasks = await Task.countDocuments({
+    createdBy: userId,
+  });
+
+  const completedTasks = await Task.countDocuments({
+    createdBy: userId,
+    status: "DONE",
+  });
+
+  const completionRate =
+    totalTasks === 0
+      ? 0
+      : Number(((completedTasks / totalTasks) * 100).toFixed(2));
+
+  return {
+    totalTasks,
+    completedTasks,
+    completionRate,
+  };
+};
+
 export const DashboardServices = {
   getDashboardStats,
   getTaskStatusStats,
   getRecentActivities,
   getWorkspaceActivities,
+  getCompletionRate,
 };

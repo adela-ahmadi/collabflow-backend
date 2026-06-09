@@ -60,9 +60,22 @@ const getWorkspaceActivities = asyncHandler(
   }
 );
 
+const getCompletionRate = asyncHandler(async (req: Request, res: Response) => {
+  const user = req.user as JwtPayload;
+
+  const result = await DashboardServices.getCompletionRate(user.userId);
+
+  res.status(200).json({
+    success: true,
+    message: "Completion rate retrieved successfully",
+    data: result,
+  });
+});
+
 export const DashboardControllers = {
   getDashboardStats,
   getTaskStatusStats,
   getRecentActivities,
   getWorkspaceActivities,
+  getCompletionRate,
 };

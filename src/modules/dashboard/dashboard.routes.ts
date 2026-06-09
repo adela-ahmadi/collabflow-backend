@@ -29,4 +29,10 @@ router.get(
   DashboardControllers.getWorkspaceActivities
 );
 
+router.get(
+  "/completion-rate",
+  auth("USER", "ADMIN"),
+  DashboardControllers.getCompletionRate
+);
+
 export default router;
