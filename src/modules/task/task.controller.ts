@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import asyncHandler from "../../utils/asyncHandler";
 
 import { TaskServices } from "./task.service";
+import sendResponse from "../../utils/sendResponse";
 
 const createTask = asyncHandler(async (req: Request, res: Response) => {
   const result = await TaskServices.createTask(
@@ -11,10 +12,10 @@ const createTask = asyncHandler(async (req: Request, res: Response) => {
     req.user
   );
 
-  res.status(201).json({
+  sendResponse(res, {
+    statusCode: 201,
     success: true,
     message: "Task created successfully",
-
     data: result,
   });
 });
@@ -25,7 +26,8 @@ const getWorkspaceTasks = asyncHandler(async (req: Request, res: Response) => {
     req.query
   );
 
-  res.status(200).json({
+  sendResponse(res, {
+    statusCode: 200,
     success: true,
     message: "Tasks retrieved successfully",
     meta: result.meta,
@@ -40,10 +42,10 @@ const updateTaskStatus = asyncHandler(async (req: Request, res: Response) => {
     req.body.status
   );
 
-  res.status(200).json({
+  sendResponse(res, {
+    statusCode: 200,
     success: true,
     message: "Task status updated successfully",
-
     data: result,
   });
 });
@@ -55,10 +57,10 @@ const assignTask = asyncHandler(async (req: Request, res: Response) => {
     req.body.assignedTo
   );
 
-  res.status(200).json({
+  sendResponse(res, {
+    statusCode: 200,
     success: true,
     message: "Task assigned successfully",
-
     data: result,
   });
 });
@@ -72,10 +74,10 @@ const updateTask = asyncHandler(async (req: Request, res: Response) => {
     req.user.userId
   );
 
-  res.status(200).json({
+  sendResponse(res, {
+    statusCode: 200,
     success: true,
     message: "Task updated successfully",
-
     data: result,
   });
 });
