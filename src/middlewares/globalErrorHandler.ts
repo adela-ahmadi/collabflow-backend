@@ -13,7 +13,11 @@ const globalErrorHandler = (
   res.status(statusCode).json({
     success: false,
     message,
-    error,
+
+    error: {
+      statusCode,
+      name: error.name,
+    },
   });
 };
 
