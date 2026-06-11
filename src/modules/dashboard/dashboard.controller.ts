@@ -72,10 +72,28 @@ const getCompletionRate = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
+const getWorkspaceOverview = asyncHandler(
+  async (req: Request, res: Response) => {
+    const user = req.user as JwtPayload;
+
+    const result = await DashboardServices.getWorkspaceOverview(
+      req.params.workspaceId as string,
+      user.userId
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Workspace overview retrieved successfully",
+      data: result,
+    });
+  }
+);
+
 export const DashboardControllers = {
   getDashboardStats,
   getTaskStatusStats,
   getRecentActivities,
   getWorkspaceActivities,
   getCompletionRate,
+  getWorkspaceOverview,
 };

@@ -35,4 +35,10 @@ router.get(
   DashboardControllers.getCompletionRate
 );
 
+router.get(
+  "/workspace-overview/:workspaceId",
+  auth("USER", "ADMIN"),
+  DashboardControllers.getWorkspaceOverview
+);
+
 export default router;

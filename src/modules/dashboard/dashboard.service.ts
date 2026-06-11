@@ -145,10 +145,36 @@ const getCompletionRate = async (userId: string) => {
   };
 };
 
+const getWorkspaceOverview = async (workspaceId: string, userId: string) => {
+  const workspace = await Workspace.findOne({
+    _id: workspaceId,
+    members: {
+      $elemMatch: {
+        user: userId,
+      },
+    },
+  });
+
+  if (!workspace) {
+    throw new AppError(403, "Access denied to this workspace");
+  }
+
+  const taskCount = await Task.countDocuments({
+    workspace: workspaceId,
+  });
+
+  return {
+    workspaceName: workspace.name,
+    memberCount: workspace.members.length,
+    taskCount,
+  };
+};
+
 export const DashboardServices = {
   getDashboardStats,
   getTaskStatusStats,
   getRecentActivities,
   getWorkspaceActivities,
   getCompletionRate,
+  getWorkspaceOverview,
 };
