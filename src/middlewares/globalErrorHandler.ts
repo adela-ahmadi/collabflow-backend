@@ -6,9 +6,21 @@ const globalErrorHandler = (
   res: Response,
   _next: NextFunction
 ) => {
-  const statusCode = error.statusCode || 500;
+  let statusCode = error.statusCode || 500;
 
-  const message = error.message || "Something went wrong";
+  let message = error.message || "Something went wrong";
+
+  if (error.name === "JsonWebTokenError") {
+    statusCode = 401;
+
+    message = "Invalid token";
+  }
+
+  if (error.name === "TokenExpiredError") {
+    statusCode = 401;
+
+    message = "Token expired";
+  }
 
   res.status(statusCode).json({
     success: false,
