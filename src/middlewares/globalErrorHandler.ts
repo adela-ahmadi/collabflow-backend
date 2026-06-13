@@ -45,6 +45,14 @@ const globalErrorHandler = (
     message = "Invalid MongoDB ObjectId";
   }
 
+  if (error.code === 11000) {
+    statusCode = 400;
+
+    const field = Object.keys(error.keyValue)[0];
+
+    message = `${field} already exists`;
+  }
+
   res.status(statusCode).json({
     success: false,
     message,
