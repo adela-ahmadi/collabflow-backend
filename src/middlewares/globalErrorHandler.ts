@@ -39,6 +39,12 @@ const globalErrorHandler = (
     }));
   }
 
+  if (error.name === "CastError") {
+    statusCode = 400;
+
+    message = "Invalid MongoDB ObjectId";
+  }
+
   res.status(statusCode).json({
     success: false,
     message,
