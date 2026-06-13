@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { ZodError } from "zod";
 
 const globalErrorHandler = (
   error: any,
@@ -9,6 +10,11 @@ const globalErrorHandler = (
   let statusCode = error.statusCode || 500;
 
   let message = error.message || "Something went wrong";
+
+  let errorSources: {
+    path: string;
+    message: string;
+  }[] = [];
 
   if (error.name === "JsonWebTokenError") {
     statusCode = 401;
@@ -22,6 +28,17 @@ const globalErrorHandler = (
     message = "Token expired";
   }
 
+  if (error instanceof ZodError) {
+    statusCode = 400;
+
+    message = "Validation Error";
+
+    errorSources = error.issues.map((issue) => ({
+      path: issue.path.join("."),
+      message: issue.message,
+    }));
+  }
+
   res.status(statusCode).json({
     success: false,
     message,
@@ -30,6 +47,8 @@ const globalErrorHandler = (
       statusCode,
       name: error.name,
     },
+
+    errorSources,
   });
 };
 
