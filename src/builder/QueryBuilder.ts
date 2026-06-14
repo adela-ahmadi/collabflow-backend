@@ -31,7 +31,7 @@ class QueryBuilder<T> {
   filter() {
     const queryObj = { ...this.query };
 
-    const excludeFields = ["search", "page", "limit", "sort"];
+    const excludeFields = ["search", "page", "limit", "sort", "fields"];
 
     excludeFields.forEach((field) => delete queryObj[field]);
 
@@ -59,6 +59,17 @@ class QueryBuilder<T> {
 
     return this;
   }
+
+  fields() {
+    const fields = this.query.fields?.split(",").join(" ") || "";
+
+    if (fields) {
+      this.modelQuery = this.modelQuery.select(fields);
+    }
+
+    return this;
+  }
+
   async countTotal() {
     const totalQueries = this.modelQuery.getFilter();
 

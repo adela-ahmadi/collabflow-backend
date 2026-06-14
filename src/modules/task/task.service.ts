@@ -54,7 +54,8 @@ const getWorkspaceTasks = async (
     .search(["title"])
     .filter()
     .sort()
-    .paginate();
+    .paginate()
+    .fields();
 
   const meta = await taskQuery.countTotal();
 
