@@ -29,13 +29,20 @@ class QueryBuilder<T> {
   }
 
   filter() {
+    console.log(this.query);
     const queryObj = { ...this.query };
 
+    let queryString = JSON.stringify(queryObj);
+
+    queryString = queryString.replace(
+      /\b(gte|gt|lte|lt)\b/g,
+      (match) => `$${match}`
+    );
     const excludeFields = ["search", "page", "limit", "sort", "fields"];
 
     excludeFields.forEach((field) => delete queryObj[field]);
 
-    this.modelQuery = this.modelQuery.find(queryObj);
+    this.modelQuery = this.modelQuery.find(JSON.parse(queryString));
 
     return this;
   }

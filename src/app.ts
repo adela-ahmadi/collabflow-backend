@@ -5,9 +5,12 @@ import morgan from "morgan";
 import router from "./routes";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger";
+import qs from "qs";
 import globalErrorHandler from "./middlewares/globalErrorHandler";
 
 const app = express();
+
+app.set("query parser", (str: string) => qs.parse(str));
 
 app.use(cors());
 app.use(helmet());
