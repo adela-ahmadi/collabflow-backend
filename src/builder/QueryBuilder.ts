@@ -29,7 +29,6 @@ class QueryBuilder<T> {
   }
 
   filter() {
-    console.log(this.query);
     const queryObj = { ...this.query };
 
     let queryString = JSON.stringify(queryObj);
