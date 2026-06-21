@@ -22,4 +22,20 @@ router.patch(
   NotificationControllers.markAsRead
 );
 
+router.patch(
+  "/read-all",
+
+  auth("USER", "ADMIN"),
+
+  NotificationControllers.markAllAsRead
+);
+
+router.get(
+  "/unread-count",
+
+  auth("USER", "ADMIN"),
+
+  NotificationControllers.getUnreadCount
+);
+
 export default router;

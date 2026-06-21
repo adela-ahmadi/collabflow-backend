@@ -44,8 +44,35 @@ const markAsRead = async (notificationId: string) => {
   return notification;
 };
 
+const markAllAsRead = async (userId: string) => {
+  await Notification.updateMany(
+    {
+      recipient: userId,
+      read: false,
+    },
+    {
+      read: true,
+    }
+  );
+
+  return null;
+};
+
+const getUnreadCount = async (userId: string) => {
+  const count = await Notification.countDocuments({
+    recipient: userId,
+    read: false,
+  });
+
+  return {
+    unreadCount: count,
+  };
+};
+
 export const NotificationServices = {
   createNotification,
   getMyNotifications,
   markAsRead,
+  markAllAsRead,
+  getUnreadCount,
 };
