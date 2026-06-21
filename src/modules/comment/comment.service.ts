@@ -40,7 +40,55 @@ const getTaskComments = async (taskId: string) => {
   return comments;
 };
 
+const updateComment = async (
+  commentId: string,
+  payload: { content: string },
+  user: JwtPayload
+) => {
+  const comment = await Comment.findById(commentId);
+
+  if (!comment) {
+    throw new AppError(404, "Comment not found");
+  }
+
+  // Only the author of the comment can update it
+  if (comment.author.toString() !== user.userId) {
+    throw new AppError(403, "You are not authorized to update this comment");
+  }
+
+  const updatedComment = await Comment.findByIdAndUpdate(
+    commentId,
+    {
+      content: payload.content,
+    },
+    {
+      new: true,
+    }
+  );
+
+  return updatedComment;
+};
+
+const deleteComment = async (commentId: string, user: JwtPayload) => {
+  const comment = await Comment.findById(commentId);
+
+  if (!comment) {
+    throw new AppError(404, "Comment not found");
+  }
+
+  // Only the author of the comment can delete it
+  if (comment.author.toString() !== user.userId) {
+    throw new AppError(403, "You are not authorized to delete this comment");
+  }
+
+  await Comment.findByIdAndDelete(commentId);
+
+  return null;
+};
+
 export const CommentServices = {
   createComment,
   getTaskComments,
+  updateComment,
+  deleteComment,
 };

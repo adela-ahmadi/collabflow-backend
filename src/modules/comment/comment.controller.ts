@@ -34,7 +34,32 @@ const getTaskComments = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
+const updateComment = asyncHandler(async (req: Request, res: Response) => {
+  const result = await CommentServices.updateComment(
+    req.params.commentId as string,
+    req.body,
+    req.user
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Comment updated successfully",
+    data: result,
+  });
+});
+
+const deleteComment = asyncHandler(async (req: Request, res: Response) => {
+  await CommentServices.deleteComment(req.params.commentId as string, req.user);
+
+  res.status(200).json({
+    success: true,
+    message: "Comment deleted successfully",
+  });
+});
+
 export const CommentControllers = {
   createComment,
   getTaskComments,
+  updateComment,
+  deleteComment,
 };

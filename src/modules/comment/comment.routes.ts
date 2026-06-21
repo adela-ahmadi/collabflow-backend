@@ -28,4 +28,20 @@ router.get(
   CommentControllers.getTaskComments
 );
 
+router.patch(
+  "/:commentId",
+
+  auth("USER", "ADMIN"),
+
+  CommentControllers.updateComment
+);
+
+router.delete(
+  "/:commentId",
+
+  auth("USER", "ADMIN"),
+
+  CommentControllers.deleteComment
+);
+
 export default router;
