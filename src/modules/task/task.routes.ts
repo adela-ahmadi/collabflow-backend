@@ -76,6 +76,14 @@ router.get(
   TaskControllers.getWorkspaceTasks
 );
 
+router.get(
+  "/my-tasks",
+
+  auth("USER", "ADMIN"),
+
+  TaskControllers.getMyTasks
+);
+
 router.patch(
   "/:taskId/status",
 

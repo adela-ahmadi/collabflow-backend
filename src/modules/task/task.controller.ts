@@ -35,6 +35,18 @@ const getWorkspaceTasks = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
+const getMyTasks = asyncHandler(async (req: Request, res: Response) => {
+  const result = await TaskServices.getMyTasks(req.user.userId, req.query);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "My tasks retrieved successfully",
+    meta: result.meta,
+    data: result.result,
+  });
+});
+
 const updateTaskStatus = asyncHandler(async (req: Request, res: Response) => {
   const result = await TaskServices.updateTaskStatus(
     req.params.taskId as string,
@@ -101,4 +113,5 @@ export const TaskControllers = {
   assignTask,
   updateTask,
   deleteTask,
+  getMyTasks,
 };

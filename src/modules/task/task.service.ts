@@ -67,6 +67,30 @@ const getWorkspaceTasks = async (
   };
 };
 
+const getMyTasks = async (userId: string, query: Record<string, any>) => {
+  const taskQuery = new QueryBuilder(
+    Task.find({
+      assignedTo: userId,
+    })
+      .populate("assignedTo", "name email")
+      .populate("createdBy", "name email"),
+    query
+  )
+    .search(["title"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const meta = await taskQuery.countTotal();
+  const result = await taskQuery.modelQuery;
+
+  return {
+    meta,
+    result,
+  };
+};
+
 const updateTaskStatus = async (
   taskId: string,
 
@@ -235,4 +259,5 @@ export const TaskServices = {
   assignTask,
   updateTask,
   deleteTask,
+  getMyTasks,
 };
