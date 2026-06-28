@@ -12,6 +12,21 @@ const getMe = async (userId: string) => {
   return user;
 };
 
+const uploadAvatar = async (userId: string, avatarUrl: string) => {
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+
+  user.avatar = avatarUrl;
+
+  await user.save();
+
+  return user;
+};
+
 export const UserServices = {
   getMe,
+  uploadAvatar,
 };

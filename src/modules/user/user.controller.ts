@@ -14,6 +14,24 @@ const getMe = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
+const uploadAvatar = asyncHandler(async (req: Request, res: Response) => {
+  if (!req.file) {
+    throw new Error("No file uploaded");
+  }
+
+  const result = await UserServices.uploadAvatar(
+    req.user.userId,
+    req.file.path
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Avatar uploaded successfully",
+    data: result,
+  });
+});
+
 export const UserControllers = {
   getMe,
+  uploadAvatar,
 };

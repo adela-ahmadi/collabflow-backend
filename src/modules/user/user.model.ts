@@ -29,6 +29,11 @@ const userSchema = new Schema<IUser>(
       default: "USER",
     },
 
+    avatar: {
+      type: String,
+      default: "",
+    },
+
     isDeleted: {
       type: Boolean,
       default: false,

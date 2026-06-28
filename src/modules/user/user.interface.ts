@@ -6,4 +6,5 @@ export interface IUser {
   password: string;
   role: UserRole;
   isDeleted?: boolean;
+  avatar?: string;
 }
